@@ -369,7 +369,8 @@ html, body {
   font-size: 70%;
   font-family: "Source Sans Pro";
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; }
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: rgba(0, 0, 0, 0.01) 0 0 1px; }
   @media (max-width: 1280px) {
     html, body {
       font-size: 60%; } }
