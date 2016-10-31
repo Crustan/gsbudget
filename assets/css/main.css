@@ -385,8 +385,12 @@ h1 {
   margin: 0;
   line-height: 1; }
 
+h1, h2, h3, h4, article, span {
+  letter-spacing: .05em; }
+
 label {
-  font-size: 1rem; }
+  font-size: 1rem;
+  letter-spacing: .05em; }
 
 .price-unit {
   font-size: .5em; }
