@@ -353,6 +353,12 @@ td,
 th {
   padding: 0; }
 
+@font-face {
+  font-family: 'Nexa Rust Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: url("https://adockastorage.blob.core.windows.net/107-cloudfiles-public/gs16/nexarustsans-black.otf") format("opentype"), url("https://adockastorage.blob.core.windows.net/107-cloudfiles-public/gs16/nexarustsans-black.eot") format("embedded-opentype"), url("https://adockastorage.blob.core.windows.net/107-cloudfiles-public/gs16/nexarustsans-black.woff") format("woff"), url("https://adockastorage.blob.core.windows.net/107-cloudfiles-public/gs16/nexarustsans-black.woff2") format("woff2"), url("https://adockastorage.blob.core.windows.net/107-cloudfiles-public/gs16/nexarustsans-black.ttf") format("truetype"); }
+
 * {
   box-sizing: border-box; }
 
