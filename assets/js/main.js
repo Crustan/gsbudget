@@ -15,6 +15,8 @@ var yesterday = function(){
   date.setDate(date.getDate() - 1);
   return date.getDate();
 };
+var yesterdayRow = {};
+var prevMonthRow = {};
 var thisWeek = function(){
   var date = new Date();
   date.setDate(date.getDate() - 1);
@@ -53,23 +55,25 @@ function getRows(data){
     var rowCols = cells[i].content.$t.split(',');
     for (var j = 0; j < rowCols.length; j++){
       var keyVal = rowCols[j].split(':');
-      rowObj[keyVal[0].trim()] = keyVal[1].trim();
+        rowObj[keyVal[0].trim()] = keyVal[1].trim();
     }
     rows.push(rowObj);
   }
   return rows;
 }
 
-$(document).ready(function(){
+function printThisMonth(){
   $.ajax(googleSheetsApiLink).then(function(data){
     var rows = getRows(data);
 
     var dayRow = $.map(rows, function(row){
       if (Number(row.day) === day()){ return row; }
     })[0];
-    var yesterdayRow = $.map(rows, function(row){
-      if (Number(row.day) === yesterday()){ return row; }
-    })[0];
+    if(day() !== 1){
+      yesterdayRow = $.map(rows, function(row){
+        if (Number(row.day) === yesterday()){ return row; }
+      })[0];
+    }
     var weekRow = $.map(rows, function(row){
       if (row.week && row.week.indexOf(thisWeek()) !== -1){ return row; }
     })[0];
@@ -100,14 +104,10 @@ $(document).ready(function(){
 
       // Month
       $(areaUnits[i]).find('.month label').text('Försäljning ' + monthRow.month);
-      $(areaUnits[i]).find('.week label').eq(0).text('Försäljning vecka ' + thisWeek());
-      $(areaUnits[i]).find('.yesterday label').eq(0).text('Försäljning ' + yesterdayRow.day + ' ' + monthRow.month);
-      $(areaUnits[i]).find('.day label').eq(0).text('Budget ' + dayRow.day + ' ' + monthRow.month);
-
-      // //$(areaUnits[i]).find('.transactions span').text(monthRow[area + 'transaktioner']);
       $(areaUnits[i]).find('.new-customers span').text(monthRow[area + 'nyakunder']);
       $(areaUnits[i]).find('.new-numbers span').text(monthRow[area + 'nummer']);
       $(areaUnits[i]).find('.avarage-purchase span.price').text(stripPriceUnit(monthRow[area + 'snittköp']));
+  // //$(areaUnits[i]).find('.transactions span').text(monthRow[area + 'transaktioner']);
 
       $(areaUnits[i]).find('.month span.price').text(stripPriceUnit(monthRow[area + 'försäljning']));
       $(areaUnits[i]).find('.month .current span').text(monthRow[area + 'utfall']);
@@ -115,6 +115,7 @@ $(document).ready(function(){
       $(areaUnits[i]).find('.month .progress-indicator .fill-container').css('width',monthRow[area + 'utfall']);
 
       // Week
+      $(areaUnits[i]).find('.week label').eq(0).text('Försäljning vecka ' + thisWeek());
       $(areaUnits[i]).find('.week article span.price').text(stripPriceUnit(weekRow[area + 'försäljning']));
       $(areaUnits[i]).find('.week .till-1 span').text(weekRow[area + 'sälj']);
       $(areaUnits[i]).find('.week .till-2 span').text(weekRow[area + 'bokningar']);
@@ -125,6 +126,12 @@ $(document).ready(function(){
       // $(areaUnits[i]).find('.week .till-4 span.price').text(stripPriceUnit(weekRow[area + 'kassa2']));
 
       // Yesterday
+      if(day() === 1){
+        $(areaUnits[i]).find('.yesterday label').eq(0).text('Försäljning ' + yesterdayRow.day + ' ' + prevMonthRow.month);
+      } else {
+        $(areaUnits[i]).find('.yesterday label').eq(0).text('Försäljning ' + yesterdayRow.day + ' ' + monthRow.month);
+      }
+
       $(areaUnits[i]).find('.yesterday article span.price').text(stripPriceUnit(yesterdayRow[area + 'försäljning']));
       $(areaUnits[i]).find('.yesterday .till-1 span').text(yesterdayRow[area + 'sälj']);
       $(areaUnits[i]).find('.yesterday .till-2 span').text(yesterdayRow[area + 'bokningar']);
@@ -132,7 +139,25 @@ $(document).ready(function(){
       $(areaUnits[i]).find('.yesterday .till-4 span.price').text(stripPriceUnit(yesterdayRow[area + 'kassa2']));
 
       // Today
+      $(areaUnits[i]).find('.day label').eq(0).text('Budget ' + dayRow.day + ' ' + monthRow.month);
       $(areaUnits[i]).find('.day article span.price').text(stripPriceUnit(dayRow[area + 'budget']));
     }
   });
+}
+
+$(document).ready(function(){
+  if(day() === 1){
+    var googleSheetsApiLinkPrevMonth = 'https://spreadsheets.google.com/feeds/list/'+ googleSheetId +'/2/public/basic?alt=json';
+    $.ajax(googleSheetsApiLinkPrevMonth).then(function(data){
+      var rows = getRows(data);
+      yesterdayRow = $.map(rows, function(row){
+        if (Number(row.day) === yesterday()){ return row; }
+      })[0];
+      prevMonthRow = $.map(rows, function(row){
+        if (row.month){ return row; }
+      })[0];
+    }).then(printThisMonth);
+  } else {
+    printThisMonth();
+  }
 });
