@@ -94,7 +94,6 @@ function printThisMonth(){
         area = 'leveransbil';
       }
       // Set dynamic HTML content
-
       // Total
       $('.total').find('label').text('Totalförsäljning ' + monthRow.month);
       $('.total').find('span.price').text(stripPriceUnit(monthRow.totalförsäljning));
@@ -117,7 +116,7 @@ function printThisMonth(){
       // Week
       $(areaUnits[i]).find('.week label').eq(0).text('Försäljning vecka ' + thisWeek());
       $(areaUnits[i]).find('.week article span.price').text(stripPriceUnit(weekRow[area + 'försäljning']));
-      $(areaUnits[i]).find('.week .till-1 span').text(weekRow[area + 'sälj']);
+      $(areaUnits[i]).find('.week .till-1 span').text(weekRow[area + 'säljomg']);
       $(areaUnits[i]).find('.week .till-2 span').text(weekRow[area + 'bokningar']);
       $(areaUnits[i]).find('.week .current span').text(weekRow[area + 'utfall']);
       $(areaUnits[i]).find('.week .goal span.price').text(stripPriceUnit(weekRow[area + 'budget']));
@@ -133,7 +132,7 @@ function printThisMonth(){
       }
 
       $(areaUnits[i]).find('.yesterday article span.price').text(stripPriceUnit(yesterdayRow[area + 'försäljning']));
-      $(areaUnits[i]).find('.yesterday .till-1 span').text(yesterdayRow[area + 'sälj']);
+      $(areaUnits[i]).find('.yesterday .till-1 span').text(yesterdayRow[area + 'säljomg']);
       $(areaUnits[i]).find('.yesterday .till-2 span').text(yesterdayRow[area + 'bokningar']);
       $(areaUnits[i]).find('.yesterday .till-3 span.price').text(stripPriceUnit(yesterdayRow[area + 'kassa1']));
       $(areaUnits[i]).find('.yesterday .till-4 span.price').text(stripPriceUnit(yesterdayRow[area + 'kassa2']));
